@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "cloudinary": "^1.36.2",
+    "express-fileupload": "^1.4.0",
+    "mongoose": "^7.1.0",
     "next": "13.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0"
