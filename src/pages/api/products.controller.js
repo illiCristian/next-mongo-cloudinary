@@ -1,4 +1,5 @@
 import productModel from "@/models/product.model";
+import fileUpload from "express-fileupload";
 
 export const getProcuts = async (req, res) => {
   const prducts = await productModel.find();
@@ -17,7 +18,7 @@ export const getProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-export const createProduct = async (req, res) => {
+/* export const createProduct = async (req, res) => {
   const { name, description, price } = req.body;
   console.log(req.files);
   const product = new productModel({
@@ -31,6 +32,28 @@ export const createProduct = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+}; */
+export const createProduct = async (req, res) => {
+  // Configurar fileUpload
+  const fileUploadMiddleware = fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/uploads",
+  });
+  fileUploadMiddleware(req, res, async () => {
+    const { name, description, price } = req.body;
+    console.log(req.files);
+    const product = new productModel({
+      name,
+      description,
+      price,
+    });
+    try {
+      await product.save();
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 };
 
 export const updateProduct = async (req, res) => {
